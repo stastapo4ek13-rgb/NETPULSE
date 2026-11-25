@@ -95,7 +95,7 @@ def find_cores():
     return CFG.get("xray", ""), CFG.get("singbox", "")
 
 def get_hdr():
-    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/3.9"}
+    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/3.9.1"}
     if CFG.get("token"): h["Authorization"] = f"Bearer {CFG['token']}"
     return h
 
@@ -158,8 +158,8 @@ COUNTRIES_INFO = [("DE", "Германия / Germany"), ("NL", "Нидерлан
 RST, DIM = "\033[0m", "\033[2m"
 
 TXT = {
-    "RU": {"sub": "Умный агрегатор и VPN-менеджер v3.9", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск", "m2": "2. Менеджер серверов (VPN / TUN / Очистка)", "m3": "3. Источники поиска", "m4": "4. Карантин пустых баз (24ч)", "m5": "5. Прокси v2rayN для парсинга", "m6": "6. Страны фильтрации", "m7": "7. Протокол поиска", "m8": "8. GeoIP проверка стран", "m9": "9. Цель проверки (Сайт)", "m10": "10. Замер скорости скачивания", "m11": "11. Режим нагрузки на ЦП", "m12": "12. Репозиториев / Лимит", "m13": "13. Кастомизация (Цвет и Фон)", "m14": "14. Язык / Ярлык / Ядра / Токен / Порт", "m0": "0. Выход", "ask": "Выберите пункт меню > ", "all": "ВСЕ СТРАНЫ", "on": "ВКЛ", "off": "ВЫКЛ", "srcs": {0: "ВСЕ (GitHub + TG + Web)", 1: "Только GitHub", 2: "Только Telegram + Web", 3: "GitHub + Web (без TG)"}, "protos": {0: "ВСЕ (VLESS+Trojan+SS+HY2+TUIC)", 1: "Только VLESS", 2: "Только Trojan", 3: "Только Shadowsocks", 4: "Только Hysteria2 / TUIC"}, "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 4: "Звезды", 5: "Радар", 0: "Выкл"}, "modes": {1: "Игровой (12 пот., низкий ЦП)", 2: "Средний (35 потоков)", 3: "Турбо (80 потоков)"}, "s1": "[1/5] Сбор источников (GitHub / TG / Web)...", "s2": "[2/5] Скачивание и парсинг", "s3": "[3/5] Умный фильтр и TCP-отсев", "s4": "[4/5] Batch-проверка (Xray / Sing-box)", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Найдено рабочих:", "url": "Подписки:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "no_xray": "[!] Ядра не найдены! Скачать автоматически с GitHub? (Y/N) > "},
-    "EN": {"sub": "Smart Aggregator & VPN Manager v3.9", "auth": "Authors: Gemini & Glitch", "m1": "1. Start Scan", "m2": "2. Server Manager (VPN / TUN / Auto-Clean)", "m3": "3. Search Sources", "m4": "4. Dead Source Quarantine (24h)", "m5": "5. v2rayN Proxy for Scraping", "m6": "6. Target Countries", "m7": "7. Target Protocol", "m8": "8. GeoIP Country Lookup", "m9": "9. Validation Target Site", "m10": "10. Download Speed Test", "m11": "11. CPU Load Mode", "m12": "12. Repos / Limit", "m13": "13. Customization (Color & BG)", "m14": "14. Lang / Shortcut / Cores / Token / Port", "m0": "0. Exit", "ask": "Select option > ", "all": "ALL COUNTRIES", "on": "ON", "off": "OFF", "srcs": {0: "ALL (GitHub + TG + Web)", 1: "GitHub Only", 2: "Telegram + Web Only", 3: "GitHub + Web (No TG)"}, "protos": {0: "ALL (VLESS+Trojan+SS+HY2+TUIC)", 1: "VLESS Only", 2: "Trojan Only", 3: "Shadowsocks Only", 4: "Hysteria2 / TUIC Only"}, "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 4: "Stars", 5: "Radar", 0: "Off"}, "modes": {1: "Gaming (12 thr., Low CPU)", 2: "Balanced (35 threads)", 3: "Turbo (80 threads)"}, "s1": "[1/5] Collecting sources (GitHub / TG / Web)...", "s2": "[2/5] Downloading & parsing", "s3": "[3/5] Smart filter & TCP check", "s4": "[4/5] Batch check (Xray / Sing-box)", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Subscriptions:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "no_xray": "[!] Cores not found! Download automatically from GitHub? (Y/N) > "}
+    "RU": {"sub": "Умный агрегатор и VPN-менеджер v3.9.1", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск", "m2": "2. Менеджер серверов (VPN / TUN / Избранное)", "m3": "3. Источники поиска", "m4": "4. Карантин пустых баз (24ч)", "m5": "5. Прокси v2rayN для парсинга", "m6": "6. Страны фильтрации", "m7": "7. Протокол поиска", "m8": "8. GeoIP проверка стран", "m9": "9. Цель проверки (Сайт)", "m10": "10. Замер скорости скачивания", "m11": "11. Режим нагрузки на ЦП", "m12": "12. Репозиториев / Лимит", "m13": "13. Кастомизация (Цвет и Фон)", "m14": "14. Язык / Ярлык / Ядра / Токен / Порт", "m0": "0. Выход", "ask": "Выберите пункт меню > ", "all": "ВСЕ СТРАНЫ", "on": "ВКЛ", "off": "ВЫКЛ", "srcs": {0: "ВСЕ (GitHub + TG + Web)", 1: "Только GitHub", 2: "Только Telegram + Web", 3: "GitHub + Web (без TG)"}, "protos": {0: "ВСЕ (VLESS+Trojan+SS+HY2+TUIC)", 1: "Только VLESS", 2: "Только Trojan", 3: "Только Shadowsocks", 4: "Только Hysteria2 / TUIC"}, "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 4: "Звезды", 5: "Радар", 0: "Выкл"}, "modes": {1: "Игровой (12 пот., низкий ЦП)", 2: "Средний (35 потоков)", 3: "Турбо (80 потоков)"}, "s1": "[1/5] Сбор источников (GitHub / TG / Web)...", "s2": "[2/5] Скачивание и парсинг", "s3": "[3/5] Умный фильтр и TCP-отсев", "s4": "[4/5] Batch-проверка (Xray / Sing-box)", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Найдено рабочих:", "url": "Подписки:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "no_xray": "[!] Ядра не найдены! Скачать автоматически с GitHub? (Y/N) > "},
+    "EN": {"sub": "Smart Aggregator & VPN Manager v3.9.1", "auth": "Authors: Gemini & Glitch", "m1": "1. Start Scan", "m2": "2. Server Manager (VPN / TUN / Favorites)", "m3": "3. Search Sources", "m4": "4. Dead Source Quarantine (24h)", "m5": "5. v2rayN Proxy for Scraping", "m6": "6. Target Countries", "m7": "7. Target Protocol", "m8": "8. GeoIP Country Lookup", "m9": "9. Validation Target Site", "m10": "10. Download Speed Test", "m11": "11. CPU Load Mode", "m12": "12. Repos / Limit", "m13": "13. Customization (Color & BG)", "m14": "14. Lang / Shortcut / Cores / Token / Port", "m0": "0. Exit", "ask": "Select option > ", "all": "ALL COUNTRIES", "on": "ON", "off": "OFF", "srcs": {0: "ALL (GitHub + TG + Web)", 1: "GitHub Only", 2: "Telegram + Web Only", 3: "GitHub + Web (No TG)"}, "protos": {0: "ALL (VLESS+Trojan+SS+HY2+TUIC)", 1: "VLESS Only", 2: "Trojan Only", 3: "Shadowsocks Only", 4: "Hysteria2 / TUIC Only"}, "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 4: "Stars", 5: "Radar", 0: "Off"}, "modes": {1: "Gaming (12 thr., Low CPU)", 2: "Balanced (35 threads)", 3: "Turbo (80 threads)"}, "s1": "[1/5] Collecting sources (GitHub / TG / Web)...", "s2": "[2/5] Downloading & parsing", "s3": "[3/5] Smart filter & TCP check", "s4": "[4/5] Batch check (Xray / Sing-box)", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Subscriptions:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "no_xray": "[!] Cores not found! Download automatically from GitHub? (Y/N) > "}
 }
 SUB_MAP, SRC_STATS, CHECKED, FOUND_COUNT, STOP_EVENT, LOCK, PROC_FLAGS = {}, {}, 0, 0, threading.Event(), threading.Lock(), 0
 ACTIVE_PROC, ACTIVE_NAME, ACTIVE_URI, TUN_CFG_PATH = None, "", "", ""
@@ -441,7 +441,8 @@ def get_free_ports(n):
     for _ in range(n):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         s.bind(("127.0.0.1", 0))
-        ports.append(s.getsockname().pop())
+        _, pt = s.getsockname()
+        ports.append(pt)
         socks.append(s)
     for s in socks: s.close()
     return ports
@@ -555,28 +556,6 @@ def run_batch_group(items, is_sb=False):
             try: os.remove(tmp_cfg)
             except Exception: pass
     return found_batch
-
-def purge_dead_rows(rows):
-    if not rows: return list(), 0
-    xray_items, sb_items = list(), list()
-    for ln in rows:
-        base = first(ln.split("#"), ln)
-        sc, _, _ = get_hp(base)
-        if sc in ("hy2", "tuic"): sb_items.append(("clean", ln))
-        else: xray_items.append(("clean", ln))
-    alive_map = {}
-    for batch, is_sb in [(xray_items[i:i + 50], False) for i in range(0, len(xray_items), 50)] + [(sb_items[i:i + 25], True) for i in range(0, len(sb_items), 25)]:
-        for _, ms, cc, clean in run_batch_group(batch, is_sb):
-            alive_map[first(clean.split("#"), clean)] = (ms, clean)
-    new_rows = list()
-    for ln in rows:
-        base = first(ln.split("#"), ln)
-        if base in alive_map:
-            _, updated = alive_map[base]
-            new_rows.append(updated)
-    removed = len(rows) - len(new_rows)
-    with open("best_configs.txt", "w", encoding="utf-8") as f: f.write("\n".join(new_rows))
-    return new_rows, removed
 def set_win_proxy(enable, port=10809):
     try:
         key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Internet Settings", 0, winreg.KEY_SET_VALUE)
