@@ -5,7 +5,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 import requests
 
 os.system("")
-SEARCH_QUERY = "vless reality subscription"
+SEARCH_QUERY = "vless trojan ss subscription"
 TCP_WORKERS = 300
 SPEED_URL = "http://tele2.net"
 TIMEOUT, LOCAL_PORT = 3.5, 18080
@@ -14,7 +14,7 @@ GH = "https://" + "a" + "pi" + ".github.com"
 RAW = "https://" + "raw" + ".githubusercontent.com"
 
 CFG_FILE = "netpulse_config.json"
-CFG = {"lang": "RU", "color": "\033[96m", "cname": "Cyan", "countries": set(), "geoip": False, "speed": True, "mode": 3, "repos": 20, "limit": 40, "token": "", "bg": 1, "target": 1, "xray": r"C:\vpns\v2rayN-windows-64\bin\xray\xray.exe"}
+CFG = {"lang": "RU", "color": "\033[96m", "cname": "Cyan", "countries": set(), "proto": 0, "geoip": False, "speed": True, "mode": 3, "repos": 20, "limit": 40, "token": "", "bg": 1, "target": 1, "xray": r"C:\vpns\v2rayN-windows-64\bin\xray\xray.exe"}
 
 TARGETS = {
     1: ("http://msftconnecttest.com", "Basic Internet / Базовый"),
@@ -51,7 +51,7 @@ def find_xray():
     return ""
 
 def get_hdr():
-    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/2.2"}
+    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/2.4"}
     if CFG.get("token"): h["Authorization"] = f"Bearer {CFG['token']}"
     return h
 
@@ -62,8 +62,8 @@ COUNTRIES_INFO = [("DE", "Германия / Germany"), ("NL", "Нидерлан
 RST, DIM = "\033[0m", "\033[2m"
 
 TXT = {
-    "RU": {"sub": "Умный агрегатор и валидатор VLESS / Trojan v2.2", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск с GitHub", "m2": "2. Перепроверить best_configs.txt", "m3": "3. Страны фильтрации", "m4": "4. GeoIP проверка стран", "m5": "5. Цель проверки (Сайт)", "m6": "6. Замер скорости скачивания", "m7": "7. Режим нагрузки на ЦП", "m8": "8. Репозиториев для поиска", "m9": "9. Лимит рабочих серверов", "m10": "10. Справочник кодов стран", "m11": "11. Кастомизация (Цвет и Фон)", "m12": "12. Сменить язык (RU / EN)", "m13": "13. Создать ярлык на Рабочем столе", "m14": "14. GitHub API Токен", "m0": "0. Выход", "ask": "Выберите пункт меню > ", "all": "ВСЕ СТРАНЫ", "on": "ВКЛ", "off": "ВЫКЛ", "notok": "НЕТ (60 запр/ч)", "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 0: "Выкл"}, "modes": {1: "Игровой (12 пот., низкий ЦП)", 2: "Средний (35 потоков)", 3: "Турбо (80 потоков)"}, "s1": "[1/5] Поиск репозиториев и веток...", "s2": "[2/5] Скачивание файлов", "s3": "[3/5] Быстрый TCP-отсев", "s4": "[4/5] Проверка через Xray", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Найдено рабочих:", "url": "Общая подписка:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "net_err": "[!] Ошибка сети при запросе к GitHub.", "no_xray": "[!] xray.exe не найден! Укажите путь в netpulse_config.json"},
-    "EN": {"sub": "Smart VLESS / Trojan Aggregator & Validator v2.2", "auth": "Authors: Gemini & Glitch", "m1": "1. Start GitHub Scan", "m2": "2. Re-check best_configs.txt", "m3": "3. Target Countries", "m4": "4. GeoIP Country Lookup", "m5": "5. Validation Target Site", "m6": "6. Download Speed Test", "m7": "7. CPU Load Mode", "m8": "8. Repositories to Scan", "m9": "9. Max Working Servers Limit", "m10": "10. Supported Country Codes", "m11": "11. Customization (Color & BG)", "m12": "12. Switch Language (RU / EN)", "m13": "13. Create Desktop Shortcut (.bat)", "m14": "14. GitHub API Token", "m0": "0. Exit", "ask": "Select option > ", "all": "ALL COUNTRIES", "on": "ON", "off": "OFF", "notok": "NONE (60 req/h)", "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 0: "Off"}, "modes": {1: "Gaming (12 thr., Low CPU)", 2: "Balanced (35 threads)", 3: "Turbo (80 threads)"}, "s1": "[1/5] Scanning repositories & trees...", "s2": "[2/5] Downloading files", "s3": "[3/5] Fast TCP filtering", "s4": "[4/5] Xray real validation", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Main subscription:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "net_err": "[!] GitHub network timeout.", "no_xray": "[!] xray.exe not found! Set path in netpulse_config.json"}
+    "RU": {"sub": "Умный агрегатор VLESS / Trojan / Shadowsocks v2.4", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск с GitHub", "m2": "2. Перепроверить best_configs.txt", "m3": "3. Страны фильтрации", "m4": "4. Протокол поиска", "m5": "5. GeoIP проверка стран", "m6": "6. Цель проверки (Сайт)", "m7": "7. Замер скорости скачивания", "m8": "8. Режим нагрузки на ЦП", "m9": "9. Репозиториев для поиска", "m10": "10. Лимит рабочих серверов", "m11": "11. Справочник кодов стран", "m12": "12. Кастомизация (Цвет и Фон)", "m13": "13. Сменить язык (RU / EN)", "m14": "14. Создать ярлык на Рабочем столе", "m15": "15. GitHub API Токен", "m0": "0. Выход", "ask": "Выберите пункт меню > ", "all": "ВСЕ СТРАНЫ", "on": "ВКЛ", "off": "ВЫКЛ", "notok": "НЕТ (60 запр/ч)", "protos": {0: "ВСЕ (VLESS+Trojan+SS)", 1: "Только VLESS", 2: "Только Trojan", 3: "Только Shadowsocks"}, "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 0: "Выкл"}, "modes": {1: "Игровой (12 пот., низкий ЦП)", 2: "Средний (35 потоков)", 3: "Турбо (80 потоков)"}, "s1": "[1/5] Поиск репозиториев и веток...", "s2": "[2/5] Скачивание файлов", "s3": "[3/5] Быстрый TCP-отсев", "s4": "[4/5] Проверка через Xray", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Найдено рабочих:", "url": "Общая подписка:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "net_err": "[!] Ошибка сети при запросе к GitHub.", "no_xray": "[!] xray.exe не найден! Укажите путь в netpulse_config.json"},
+    "EN": {"sub": "Smart VLESS / Trojan / Shadowsocks Validator v2.4", "auth": "Authors: Gemini & Glitch", "m1": "1. Start GitHub Scan", "m2": "2. Re-check best_configs.txt", "m3": "3. Target Countries", "m4": "4. Target Protocol", "m5": "5. GeoIP Country Lookup", "m6": "6. Validation Target Site", "m7": "7. Download Speed Test", "m8": "8. CPU Load Mode", "m9": "9. Repositories to Scan", "m10": "10. Max Working Servers Limit", "m11": "11. Supported Country Codes", "m12": "12. Customization (Color & BG)", "m13": "13. Switch Language (RU / EN)", "m14": "14. Create Desktop Shortcut (.bat)", "m15": "15. GitHub API Token", "m0": "0. Exit", "ask": "Select option > ", "all": "ALL COUNTRIES", "on": "ON", "off": "OFF", "notok": "NONE (60 req/h)", "protos": {0: "ALL (VLESS+Trojan+SS)", 1: "VLESS Only", 2: "Trojan Only", 3: "Shadowsocks Only"}, "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 0: "Off"}, "modes": {1: "Gaming (12 thr., Low CPU)", 2: "Balanced (35 threads)", 3: "Turbo (80 threads)"}, "s1": "[1/5] Scanning repositories & trees...", "s2": "[2/5] Downloading files", "s3": "[3/5] Fast TCP filtering", "s4": "[4/5] Xray real validation", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Main subscription:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "net_err": "[!] GitHub network timeout.", "no_xray": "[!] xray.exe not found! Set path in netpulse_config.json"}
 }
 
 SUB_MAP, CHECKED, FOUND_COUNT, STOP_EVENT, LOCK, PROC_FLAGS = {}, 0, 0, threading.Event(), threading.Lock(), 0
@@ -78,6 +78,24 @@ def draw_bar(cur, tot, extra=""):
     sys.stdout.write(f"\r  {CFG['color']}[{bar}] {pct:5.1f}% ({cur}/{tot}) {extra}{RST}   ")
     sys.stdout.flush()
     if cur >= tot: print()
+def b64_dec(s):
+    s = unquote(s.strip()).replace("-", "+").replace("_", "/")
+    return base64.b64decode(s + "=" * (-len(s) % 4)).decode("utf-8", errors="ignore")
+
+def parse_ss(uri):
+    try:
+        body = first(uri.split("#"), uri)[5:]
+        body = first(body.split("?"), body)
+        if "@" not in body: body = b64_dec(body)
+        if "@" not in body: return None
+        cred, hp = body.rsplit("@", 1)
+        if ":" not in cred: cred = b64_dec(cred)
+        if ":" not in cred or ":" not in hp: return None
+        m, pwd = cred.split(":", 1)
+        h, pt = hp.rsplit(":", 1)
+        return h.strip("[]"), int(pt), m.strip(), pwd
+    except Exception: return None
+
 def get_files(repo):
     o, n, b = repo.get("owner", {}).get("login"), repo.get("name"), repo.get("default_branch")
     urls = list()
@@ -95,19 +113,31 @@ def get_files(repo):
     return urls
 
 def parse_text(txt):
-    pat = re.compile(r'(?:vless|trojan)://[^\s"\'<>]+')
+    pat = re.compile(r'(?:vless|trojan|ss)://[^\s"\'<>]+')
     m = pat.findall(txt)
     if not m:
-        try: m = pat.findall(base64.b64decode(txt.strip() + "=" * (-len(txt.strip()) % 4)).decode("utf-8", errors="ignore"))
+        try: m = pat.findall(b64_dec(txt))
         except Exception: pass
     return m
 
+def get_hp(uri):
+    sc = first(uri.split("://"), "").lower()
+    if sc == "ss":
+        res = parse_ss(uri)
+        return (sc, res[0], res[1]) if res else (sc, None, None)
+    p = urlparse(uri)
+    return sc, p.hostname, int(p.port) if p.port else None
+
 def tcp_ok(uri):
     try:
-        p = urlparse(uri)
-        if p.hostname in ("127.0.0.1", "0.0.0.0", "localhost"): return None
-        if p.scheme.lower() == "vless" and "security=none" in uri.lower(): return None
-        with socket.create_connection((p.hostname, int(p.port)), timeout=0.9): return uri
+        sc, h, pt = get_hp(uri)
+        pr = CFG.get("proto", 0)
+        if pr == 1 and sc != "vless": return None
+        if pr == 2 and sc != "trojan": return None
+        if pr == 3 and sc != "ss": return None
+        if not h or not pt or h in ("127.0.0.1", "0.0.0.0", "localhost"): return None
+        if sc == "vless" and "security=none" in uri.lower(): return None
+        with socket.create_connection((h, pt), timeout=0.9): return uri
     except Exception: return None
 
 def get_cc_one(host):
@@ -123,7 +153,13 @@ def get_cc_one(host):
     return host, "UN"
 
 def build_out(uri):
-    p, q, sc = urlparse(uri), parse_qs(urlparse(uri).query), urlparse(uri).scheme.lower()
+    sc = first(uri.split("://"), "").lower()
+    if sc == "ss":
+        res = parse_ss(uri)
+        if not res: return None
+        h, pt, m, pwd = res
+        return {"protocol": "shadowsocks", "settings": {"servers": list(({"address": h, "port": pt, "method": m, "password": pwd},))}}
+    p, q = urlparse(uri), parse_qs(urlparse(uri).query)
     net = first(q.get("type"), "tcp")
     if sc == "vless":
         sec = first(q.get("security"), "none")
@@ -185,10 +221,11 @@ def check_worker(uri, tot):
     ms = run_xray_test(uri, False)
     res_item = None
     if ms is not None:
+        sc, h, _ = get_hp(uri)
         need_geo = bool(CFG["countries"]) or CFG.get("geoip", False)
-        _, cc = get_cc_one(urlparse(uri).hostname) if need_geo else ("", "FAST")
+        _, cc = get_cc_one(h) if need_geo else ("", "FAST")
         if not CFG["countries"] or cc in CFG["countries"]:
-            clean = f"{first(uri.split('#'), uri)}#{urlparse(uri).scheme.upper()}_{cc}_{ms}ms"
+            clean = f"{first(uri.split('#'), uri)}#{sc.upper()}_{cc}_{ms}ms"
             with LOCK:
                 FOUND_COUNT += 1
                 with open("best_configs.txt", "a", encoding="utf-8") as f: f.write(clean + "\n")
@@ -295,8 +332,8 @@ def run_scan(recheck_mode=False):
         uniq = {}
         for c in raw:
             try:
-                p = urlparse(c)
-                if p.hostname and p.port and f"{p.scheme}:{p.hostname}:{p.port}" not in uniq: uniq[f"{p.scheme}:{p.hostname}:{p.port}"] = c
+                sc, h, pt = get_hp(c)
+                if h and pt and f"{sc}:{h}:{pt}" not in uniq: uniq[f"{sc}:{h}:{pt}"] = c
             except Exception: continue
         print(f"{CFG['color']}{tr('s3')} ({len(uniq)})...{RST}")
         alive, done = list(), 0
@@ -314,7 +351,7 @@ def run_scan(recheck_mode=False):
             r = f.result()
             if r: work.append(r)
     finalize_results(work)
-def render_bg(bg_type, tick, w=78, h=27):
+def render_bg(bg_type, tick, w=78, h=28):
     grid = list((list((" " * w)) for _ in range(h)))
     if bg_type == 1:
         wave = "─────────╲╱╲──/\\──╲/─────────"
@@ -346,6 +383,7 @@ def show_menu():
         while True:
             c = CFG["color"]
             c_str = ", ".join(sorted(CFG["countries"])) if CFG["countries"] else tr("all")
+            p_str = tr("protos")[CFG.get("proto", 0)]
             g_str = tr("on") if (CFG.get("geoip", False) or CFG["countries"]) else tr("off")
             s_str = tr("on") if CFG["speed"] else tr("off")
             m_str = tr("modes")[CFG["mode"]]
@@ -358,23 +396,24 @@ def show_menu():
             lines = [
                 f"{c}{l0}{RST}", f"{c}{l1}{RST}", f"{c}{l2}{RST}",
                 f"{c}{l3}{RST}", f"{c}{l4}{RST}", f"{c}{l5}{RST}",
-                f"{c}{' ' * 14}:: {tr('sub')} ::{RST}",
+                f"{c}{' ' * 12}:: {tr('sub')} ::{RST}",
                 f"{c}{' ' * 24}[ {tr('auth')} ]{RST}",
                 f"{c}{'=' * 74}{RST}",
                 f"  {tr('m1')}",
                 f"  {tr('m2')}",
                 f"  {tr('m3'):<36} {c}[{c_str}]{RST}",
-                f"  {tr('m4'):<36} {c}[{g_str}]{RST}",
-                f"  {tr('m5'):<36} {c}[{t_name}]{RST}",
-                f"  {tr('m6'):<36} {c}[{s_str}]{RST}",
-                f"  {tr('m7'):<36} {c}[{m_str}]{RST}",
-                f"  {tr('m8'):<36} {c}[{CFG.get('repos', 20)}]{RST}",
-                f"  {tr('m9'):<36} {c}[{CFG['limit']}]{RST}",
-                f"  {tr('m10')}",
-                f"  {tr('m11'):<36} {c}[{CFG['cname']} | {b_str}]{RST}",
-                f"  {tr('m12'):<36} {c}[{CFG['lang']}]{RST}",
-                f"  {tr('m13')}",
-                f"  {tr('m14'):<36} {c}[{tk_str}]{RST}",
+                f"  {tr('m4'):<36} {c}[{p_str}]{RST}",
+                f"  {tr('m5'):<36} {c}[{g_str}]{RST}",
+                f"  {tr('m6'):<36} {c}[{t_name}]{RST}",
+                f"  {tr('m7'):<36} {c}[{s_str}]{RST}",
+                f"  {tr('m8'):<36} {c}[{m_str}]{RST}",
+                f"  {tr('m9'):<36} {c}[{CFG.get('repos', 20)}]{RST}",
+                f"  {tr('m10'):<36} {c}[{CFG['limit']}]{RST}",
+                f"  {tr('m11')}",
+                f"  {tr('m12'):<36} {c}[{CFG['cname']} | {b_str}]{RST}",
+                f"  {tr('m13'):<36} {c}[{CFG['lang']}]{RST}",
+                f"  {tr('m14')}",
+                f"  {tr('m15'):<36} {c}[{tk_str}]{RST}",
                 f"  {tr('m0')}",
                 f"{c}{'=' * 74}{RST}",
                 f"{DIM}{c}{bot_row}{RST}",
@@ -382,7 +421,7 @@ def show_menu():
             ]
             out = list(("\033[H",))
             for idx, ln in enumerate(lines):
-                if idx < 25 and CFG.get("bg", 1) != 0:
+                if idx < 26 and CFG.get("bg", 1) != 0:
                     bg_line = f"{DIM}{c}{''.join(grid[idx])}{RST}"
                     out.append(f"\033[{idx + 1};1H{bg_line}\033[{idx + 1};1H{ln}")
                 else:
@@ -404,22 +443,23 @@ def show_menu():
                             CFG["countries"] = set(re.findall(r'[A-Z]{2}', raw_c))
                             if CFG["countries"]: CFG["geoip"] = True
                             save_cfg()
-                        elif ch == "4":
+                        elif ch == "4": CFG["proto"] = 0 if CFG.get("proto", 0) == 3 else CFG.get("proto", 0) + 1; save_cfg()
+                        elif ch == "5":
                             if not CFG["countries"]: CFG["geoip"] = not CFG.get("geoip", False); save_cfg()
-                        elif ch == "5": CFG["target"] = 1 if CFG.get("target", 1) == 3 else CFG.get("target", 1) + 1; save_cfg()
-                        elif ch == "6": CFG["speed"] = not CFG["speed"]; save_cfg()
-                        elif ch == "7": CFG["mode"] = 1 if CFG["mode"] == 3 else CFG["mode"] + 1; save_cfg()
-                        elif ch == "8":
+                        elif ch == "6": CFG["target"] = 1 if CFG.get("target", 1) == 3 else CFG.get("target", 1) + 1; save_cfg()
+                        elif ch == "7": CFG["speed"] = not CFG["speed"]; save_cfg()
+                        elif ch == "8": CFG["mode"] = 1 if CFG["mode"] == 3 else CFG["mode"] + 1; save_cfg()
+                        elif ch == "9":
                             val = input("1 - 100 > ").strip()
                             if val.isdigit() and 1 <= int(val) <= 100: CFG["repos"] = int(val); save_cfg()
-                        elif ch == "9":
+                        elif ch == "10":
                             val = input("10 - 200 > ").strip()
                             if val.isdigit() and int(val) > 0: CFG["limit"] = int(val); save_cfg()
-                        elif ch == "10":
+                        elif ch == "11":
                             print(f"\n{c}--- ISO 3166-1 Alpha-2 ---{RST}")
                             for code, name in COUNTRIES_INFO: print(f"  {c}{code}{RST} - {name}")
                             input(f"\n{tr('back')}")
-                        elif ch == "11":
+                        elif ch == "12":
                             print(f"\n{c}--- Цвет / Color ---{RST}")
                             for k, (col, nm) in COLORS.items(): print(f"  {k}. {col}{nm}{RST}")
                             sel = input("> ").strip()
@@ -429,9 +469,9 @@ def show_menu():
                             bsel = input("> ").strip()
                             if bsel in ("0", "1", "2", "3"): CFG["bg"] = int(bsel)
                             save_cfg()
-                        elif ch == "12": CFG["lang"] = "EN" if CFG["lang"] == "RU" else "RU"; save_cfg()
-                        elif ch == "13": make_shortcut(); input(f"\n{tr('back')}")
-                        elif ch == "14":
+                        elif ch == "13": CFG["lang"] = "EN" if CFG["lang"] == "RU" else "RU"; save_cfg()
+                        elif ch == "14": make_shortcut(); input(f"\n{tr('back')}")
+                        elif ch == "15":
                             CFG["token"] = input("Token (Enter = Clear) > ").strip(); save_cfg()
                         elif ch == "0": return
                         os.system("cls" if os.name == "nt" else "clear")
