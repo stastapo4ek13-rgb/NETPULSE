@@ -1,10 +1,6 @@
 (дисклеймер: сделано с помощью ии возможно обновлений не будет это как повезет проэкту)
 # NETPULSE ⚡
 
-![Python](https://shields.io)
-![Platform](https://shields.io)
-![Core](https://shields.io)
-
 **Smart VLESS / Trojan Aggregator, Real-Traffic Validator & Speed Tester with Animated Console UI.**  
 **Умный агрегатор, валидатор реального трафика и тестер скорости VLESS / Trojan с анимированным консольным интерфейсом.**
 
