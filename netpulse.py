@@ -1,10 +1,14 @@
-import base64, ctypes, shutil, io, json, msvcrt, os, random, re, socket, subprocess, sys, threading, time, traceback, uuid, winreg, winsound, zipfile
-from concurrent.futures import ThreadPoolExecutor, as_completed
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+import os, sys, io, re, time, json, math, uuid, socket, ssl, struct, shutil, random, ctypes, base64, hashlib, zipfile, traceback, subprocess, threading, urllib.parse, urllib.request
+import msvcrt, winreg, winsound, requests, urllib3
 from ctypes import wintypes
-from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import parse_qs, unquote, urlparse
-import requests
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
+urllib3.disable_warnings()
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 os.system("")
 SEARCH_QUERIES_EN = [
     "vless reality subscription", "vless trojan free", "hysteria2 tuic vless free",
@@ -42,8 +46,8 @@ IPIFY_URL = "https://icanhazip.com"
 TIMEOUT = 4.0
 
 GH_HOST = "https://" + "github.com"
-GH = "https://" + "://github.com"
-RAW = "https://" + "://githubusercontent.com"
+GH = "https://github.com"
+RAW = "https://githubusercontent.com"
 JSDELIVR = "https://" + "cdn.jsdelivr.net/gh"
 STATICALLY = "https://" + "cdn.statically.io/gh"
 TG_WEB = "https://" + "t.me/s/"
@@ -66,7 +70,7 @@ WEB_NODES = [
 DEFAULT_WEB = [f"{GH_HOST}/{o}/{r}/blob/{b}/{p}" for o, r, b, p in WEB_NODES]
 RU_BYPASS_DOMAINS = [".ru", ".xn--p1ai", ".su", "yandex.ru", "ya.ru", "vk.com", "vk.ru", "mail.ru", "gosuslugi.ru", "sberbank.ru", "tbank.ru", "ozon.ru", "wildberries.ru", "avito.ru", "kinopoisk.ru"]
 CUSTOM_FILE, BL_FILE, CFG_FILE, FAV_FILE, CACHE_FILE, STATS_FILE, LOG_FILE = "custom_sources.txt", "netpulse_blacklist.json", "netpulse_config.json", "favorites.txt", "alive_cache.json", "sources_stats.json", "netpulse_vpn.log"
-CFG = {"lang": "RU", "color": "\033[38;2;157;78;221m", "cname": "#9D4EDD", "countries": set(), "proto": "", "src": 0, "gh_lang": 0, "wl_mode": 0, "use_px": False, "px_port": 10809, "sub_port": 18080, "tun": False, "failover": True, "blacklist": True, "geoip": True, "strict_ip": True, "auto_scan_min": 0, "speed": True, "mode": 3, "repos": 40, "batch_cap": 3500, "limit": 40, "min_speed": 0.0, "max_ping": 0, "font": 1, "tstyle": 1, "winfont": "Consolas", "compact": False, "overlay": False, "grad": 1, "user_presets": {}, "token": "", "bg": 6, "target": 1, "xray": r"C:\vpns\v2rayN-windows-64\bin\xray\xray.exe", "singbox": ""}
+CFG = {"lang": "RU", "color": "\033[38;2;157;78;221m", "cname": "#9D4EDD", "countries": set(), "proto": "", "src": 0, "gh_lang": 0, "wl_mode": 0, "use_px": False, "px_port": 10809, "sub_port": 18080, "tun": False, "failover": True, "blacklist": True, "geoip": True, "strict_ip": True, "tls_frag": False, "proc_mode": 0, "proc_list": "", "autostart": False, "start_tray": False, "auto_conn_cc": "", "auto_scan_min": 0, "speed": True, "mode": 3, "repos": 40, "batch_cap": 3500, "limit": 40, "min_speed": 0.0, "max_ping": 0, "font": 1, "tstyle": 1, "winfont": "Consolas", "compact": False, "overlay": False, "grad": 1, "user_presets": {}, "token": "", "bg": 6, "target": 1, "xray": "", "singbox": ""}
 TARGETS = {1: ("https://icanhazip.com", "Basic HTTPS / Базовый IP"), 2: ("https://youtube.com", "YouTube / Google"), 3: ("https://discord.com", "Discord / OpenAI")}
 def is_admin():
     try: return bool(ctypes.windll.shell32.IsUserAnAdmin())
@@ -159,7 +163,7 @@ def find_cores():
     return CFG.get("xray", ""), CFG.get("singbox", "")
 
 def get_hdr():
-    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/6.2"}
+    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/1.6.8"}
     if CFG.get("token"): h["Authorization"] = f"Bearer {CFG['token']}"
     return h
 
@@ -245,7 +249,7 @@ BANNERS = {
         "  █ █ █ █▄▄    █   █▄▄▀ █  █ █    ▀▀▀█ █▄▄ ",
         "  █  ▀█ █▄▄▄   █   █    ▀▄▄▀ █▄▄▄ ▄▄▄▀ █▄▄▄",
         "  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━",
-        "        [ NETPULSE KERNEL ENGINE V1.6.8 ]    ",
+        "        [ NETPULSE KERNEL ENGINE V2.0 ]    ",
         "                                           "
     ])
 }
@@ -253,8 +257,8 @@ COUNTRIES_INFO = [("DE", "Германия / Germany"), ("NL", "Нидерлан
 RST, DIM = "\033[0m", "\033[2m"
 
 TXT = {
-    "RU": {"sub": "Умный агрегатор и VPN-менеджер V1.6.8", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск / Допроверить кэш", "m2": "2. Проверить буфер обмена (Clipboard Scan)", "m3": "3. Менеджер серверов (VPN / TUN / Трафик-лог)", "m4": "4. Рейтинг репозиториев и Приоритет скана", "m5": "5. Защита от белых списков (CDN + RU-SNI)", "m6": "6. Источники / Язык баз / Карантин", "m7": "7. Прокси v2rayN для парсинга", "m8": "8. Страны и Протокол поиска (без RU)", "m9": "9. GeoIP / Strict Anti-DPI (Смена IP)", "m10": "10. Цель проверки (Сайт)", "m11": "11. Замер скорости / Нагрузка на ЦП", "m12": "12. Лимиты / Мин.Скорость / Макс.Пинг", "m13": "13. Кастомизация (Цвет, Фон и Шрифт)", "m14": "14. Язык / Ярлык / Ядра / Токен / Порт", "m15": "15. Авто-проверка по расписанию (Таймер)", "m0": "0. Выход  |  [W] Свернуть в системный трей", "ask": "Выберите пункт меню > ", "all": "ВСЕ (без RU)", "on": "ВКЛ", "off": "ВЫКЛ", "unit": "узл/с", "wl_m": {0: "АВТО (CDN)", 1: "Приоритет RU-SNI", 2: "Строго RU-SNI"}, "srcs": {0: "ВСЕ (GH+TG+Web)", 1: "Только GH", 2: "Только TG+Web", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "Только RU", 2: "Только EN"}, "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 4: "Звезды", 5: "Радар", 6: "ДНК", 7: "Дождь", 8: "Волны", 9: "Искры", 10: "Сканер", 0: "Выкл"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Сбор источников (GitHub / CDN / TG / Web)...", "s2": "[2/5] Скачивание и парсинг", "s3": "[3/5] Умный фильтр и TCP-отсев", "s4": "[4/5] Турбо-проверка (Ctrl+C = Стоп)", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Рабочих серверов:", "url": "Подписки:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "no_xray": "[!] Ядра не найдены! Скачать автоматически с GitHub? (Y/N) > "},
-    "EN": {"sub": "Smart Aggregator & VPN Manager V1.6.8", "auth": "Authors: Gemini & Glitch", "m1": "1. Start Scan / Resume TCP Cache", "m2": "2. Clipboard Scan (Paste & Test)", "m3": "3. Server Manager (VPN / TUN / Traffic Log)", "m4": "4. Repo Leaderboard & Scan Priority", "m5": "5. Whitelist Shield (CDN + RU-SNI)", "m6": "6. Sources / Repo Lang / Quarantine", "m7": "7. v2rayN Proxy for Scraping", "m8": "8. Countries & Protocol (No RU)", "m9": "9. GeoIP / Strict Anti-DPI (IP Check)", "m10": "10. Validation Target Site", "m11": "11. Speed Test / CPU Load Mode", "m12": "12. Repos / [4/5] Cap / Limit", "m13": "13. Customization (RGB Color & 10 BGs)", "m14": "14. Lang / Shortcut / Cores / Token / Port", "m15": "15. Scheduled Auto-Scan (Timer)", "m0": "0. Exit  |  [W] Minimize to System Tray", "ask": "Select option > ", "all": "ALL (No RU)", "on": "ON", "off": "OFF", "unit": "nodes/s", "wl_m": {0: "AUTO (CDN)", 1: "Priority RU-SNI", 2: "Strict RU-SNI"}, "srcs": {0: "ALL (GH+TG+Web)", 1: "GH Only", 2: "TG+Web Only", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "RU Only", 2: "EN Only"}, "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 4: "Stars", 5: "Radar", 6: "DNA", 7: "Rain", 8: "Sine", 9: "Sparks", 10: "Laser", 0: "Off"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Collecting sources (GitHub / CDN / TG / Web)...", "s2": "[2/5] Downloading & parsing", "s3": "[3/5] Smart filter & TCP check", "s4": "[4/5] Turbo batch check (Ctrl+C = Stop)", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Subscriptions:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "no_xray": "[!] Cores not found! Download automatically from GitHub? (Y/N) > "}
+    "RU": {"sub": "Умный агрегатор и VPN-менеджер V2.0", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск / Допроверить кэш", "m2": "2. Проверить буфер обмена (Clipboard Scan)", "m3": "3. Менеджер серверов (VPN / TUN / Трафик-лог)", "m4": "4. Рейтинг репозиториев и Приоритет скана", "m5": "5. Защита от белых списков (CDN + RU-SNI)", "m6": "6. Источники / Язык баз / Карантин", "m7": "7. Прокси v2rayN для парсинга", "m8": "8. Страны и Протокол поиска (без RU)", "m9": "9. GeoIP / Strict Anti-DPI (Смена IP)", "m10": "10. Цель проверки (Сайт)", "m11": "11. Замер скорости / Нагрузка на ЦП", "m12": "12. Лимиты / Мин.Скорость / Макс.Пинг", "m13": "13. Кастомизация (Цвет, Фон и Шрифт)", "m14": "14. Язык / Ярлык / Ядра / Токен / Порт", "m15": "15. Авто-проверка по расписанию (Таймер)", "m0": "0. Выход  |  [W] Свернуть в системный трей", "ask": "Выберите пункт меню > ", "all": "ВСЕ (без RU)", "on": "ВКЛ", "off": "ВЫКЛ", "unit": "узл/с", "wl_m": {0: "АВТО (CDN)", 1: "Приоритет RU-SNI", 2: "Строго RU-SNI"}, "srcs": {0: "ВСЕ (GH+TG+Web)", 1: "Только GH", 2: "Только TG+Web", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "Только RU", 2: "Только EN"}, "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 4: "Звезды", 5: "Радар", 6: "ДНК", 7: "Дождь", 8: "Волны", 9: "Искры", 10: "Сканер", 0: "Выкл"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Сбор источников (GitHub / CDN / TG / Web)...", "s2": "[2/5] Скачивание и парсинг", "s3": "[3/5] Умный фильтр и TCP-отсев", "s4": "[4/5] Турбо-проверка (Ctrl+C = Стоп)", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Рабочих серверов:", "url": "Подписки:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "no_xray": "[!] Ядра не найдены! Скачать автоматически с GitHub? (Y/N) > "},
+    "EN": {"sub": "Smart Aggregator & VPN Manager V2.0", "auth": "Authors: Gemini & Glitch", "m1": "1. Start Scan / Resume TCP Cache", "m2": "2. Clipboard Scan (Paste & Test)", "m3": "3. Server Manager (VPN / TUN / Traffic Log)", "m4": "4. Repo Leaderboard & Scan Priority", "m5": "5. Whitelist Shield (CDN + RU-SNI)", "m6": "6. Sources / Repo Lang / Quarantine", "m7": "7. v2rayN Proxy for Scraping", "m8": "8. Countries & Protocol (No RU)", "m9": "9. GeoIP / Strict Anti-DPI (IP Check)", "m10": "10. Validation Target Site", "m11": "11. Speed Test / CPU Load Mode", "m12": "12. Repos / [4/5] Cap / Limit", "m13": "13. Customization (RGB Color & 10 BGs)", "m14": "14. Lang / Shortcut / Cores / Token / Port", "m15": "15. Scheduled Auto-Scan (Timer)", "m0": "0. Exit  |  [W] Minimize to System Tray", "ask": "Select option > ", "all": "ALL (No RU)", "on": "ON", "off": "OFF", "unit": "nodes/s", "wl_m": {0: "AUTO (CDN)", 1: "Priority RU-SNI", 2: "Strict RU-SNI"}, "srcs": {0: "ALL (GH+TG+Web)", 1: "GH Only", 2: "TG+Web Only", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "RU Only", 2: "EN Only"}, "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 4: "Stars", 5: "Radar", 6: "DNA", 7: "Rain", 8: "Sine", 9: "Sparks", 10: "Laser", 0: "Off"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Collecting sources (GitHub / CDN / TG / Web)...", "s2": "[2/5] Downloading & parsing", "s3": "[3/5] Smart filter & TCP check", "s4": "[4/5] Turbo batch check (Ctrl+C = Stop)", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Subscriptions:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "no_xray": "[!] Cores not found! Download automatically from GitHub? (Y/N) > "}
 }
 
 SUB_MAP, SRC_STATS, CHECKED, FOUND_COUNT, STOP_EVENT, LOCK, PROC_FLAGS = {}, {}, 0, 0, threading.Event(), threading.Lock(), 0
@@ -617,7 +621,7 @@ def build_sb_sub(uris):
         o = build_sb_out(u, tg)
         if o: outs.append(o); tags.append(tg)
     if not outs: return ""
-    return json.dumps({"log": {"level": "info"}, "dns": {"servers": [{"tag": "remote", "type": "https", "server": "1.1.1.1", "detour": "proxy"}, {"tag": "local", "type": "local"}], "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]}, "inbounds": [{"type": "mixed", "tag": "mixed-in", "listen": "127.0.0.1", "listen_port": 2080}], "outbounds": [{"type": "selector", "tag": "proxy", "outbounds": ["auto"] + tags}, {"type": "urltest", "tag": "auto", "outbounds": tags, "url": "http://gstatic.com", "interval": "5m"}] + outs + [{"type": "direct", "tag": "direct"}], "route": {"rules": [{"action": "sniff"}, {"protocol": "dns", "action": "hijack-dns"}, {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"}, {"ip_is_private": True, "outbound": "direct"}], "auto_detect_interface": True, "default_domain_resolver": "local"}}, ensure_ascii=False, indent=2)
+    return json.dumps({"log": {"level": "info"}, "dns": {"servers": [{"tag": "remote", "type": "https", "server": "1.1.1.1", "detour": "proxy"}, {"tag": "local", "type": "local"}], "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]}, "inbounds": [{"type": "mixed", "tag": "mixed-in", "listen": "127.0.0.1", "listen_port": 2080}], "outbounds": [{"type": "selector", "tag": "proxy", "outbounds": ["auto"] + tags}, {"type": "urltest", "tag": "auto", "outbounds": tags, "url": "http://gstatic.com", "interval": "5m"}] + outs + [{"type": "direct", "tag": "direct"}], "route": {"rules": [{"action": "sniff"}, {"protocol": "dns", "action": "hijack-dns"}, {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"}, {"ip_is_private": True, "outbound": "direct"}] + ([{"process_name": [x.strip() for x in CFG.get("proc_list", "").split(",") if x.strip()], "outbound": "proxy" if CFG.get("proc_mode", 0) == 1 else "direct"}] if CFG.get("proc_mode", 0) in (1, 2) and CFG.get("proc_list", "").strip() else list()), "final": "direct" if (CFG.get("proc_mode", 0) == 1 and CFG.get("proc_list", "").strip()) else "proxy", "auto_detect_interface": True, "default_domain_resolver": "local"}}, ensure_ascii=False, indent=2)
 
 GEO_CACHE, GEO_LOCK = {}, threading.Lock()
 def wait_port(port, tries=35):
@@ -892,7 +896,7 @@ def minimize_to_tray():
     u32.RegisterClassW(ctypes.byref(wc))
     global TRAY_HWND
     hwnd_msg = TRAY_HWND = u32.CreateWindowExW(0, cls_name, "NetPulseTray", 0, 0, 0, 0, 0, 0, 0, hinst, None)
-    nid = NOTIFYICONDATAW(cbSize=ctypes.sizeof(NOTIFYICONDATAW), hWnd=hwnd_msg, uID=1, uFlags=7, uCallbackMessage=WM_TRAY, hIcon=u32.LoadIconW(0, 32516), szTip=f"NETPULSE V1.6.8 | {ACTIVE_NAME if ACTIVE_NAME else 'VPN: OFF'}"[:120])
+    nid = NOTIFYICONDATAW(cbSize=ctypes.sizeof(NOTIFYICONDATAW), hWnd=hwnd_msg, uID=1, uFlags=7, uCallbackMessage=WM_TRAY, hIcon=u32.LoadIconW(0, 32516), szTip=f"NETPULSE V2.0 | {ACTIVE_NAME if ACTIVE_NAME else 'VPN: OFF'}"[:120])
     s32.Shell_NotifyIconW(0, ctypes.byref(nid))
     m_msg = wintypes.MSG()
     while u32.GetMessageW(ctypes.byref(m_msg), 0, 0, 0) != 0:
@@ -951,7 +955,7 @@ def connect_vpn(uri, label):
         if not sb_out: add_log("Ошибка sing-box: невалидный формат ссылки"); return False
         port = pick_bind_port(CFG.get("px_port", 10809))
         inb = [{"type": "tun", "interface_name": "NetPulseTUN", "address": ["172.19.0.1/30"], "mtu": 1400, "auto_route": True, "strict_route": True, "stack": "system"}] if CFG.get("tun", False) else [{"type": "http", "listen": "127.0.0.1", "listen_port": port}]
-        sb_cfg = {"log": {"level": "info", "timestamp": False}, "dns": {"servers": [{"tag": "remote", "type": "https", "server": "1.1.1.1", "detour": "proxy"}, {"tag": "local", "type": "local"}], "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]}, "inbounds": inb, "outbounds": [sb_out, {"type": "direct", "tag": "direct"}], "route": {"rules": [{"action": "sniff"}, {"protocol": "dns", "action": "hijack-dns"}, {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"}, {"ip_is_private": True, "outbound": "direct"}], "auto_detect_interface": True, "default_domain_resolver": "local"}}
+        sb_cfg = {"log": {"level": "info", "timestamp": False}, "dns": {"servers": [{"tag": "remote", "type": "https", "server": "1.1.1.1", "detour": "proxy"}, {"tag": "local", "type": "local"}], "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]}, "inbounds": inb, "outbounds": [sb_out, {"type": "direct", "tag": "direct"}], "route": {"rules": [{"action": "sniff"}, {"protocol": "dns", "action": "hijack-dns"}, {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"}, {"ip_is_private": True, "outbound": "direct"}] + ([{"process_name": [x.strip() for x in CFG.get("proc_list", "").split(",") if x.strip()], "outbound": "proxy" if CFG.get("proc_mode", 0) == 1 else "direct"}] if CFG.get("proc_mode", 0) in (1, 2) and CFG.get("proc_list", "").strip() else list()), "final": "direct" if (CFG.get("proc_mode", 0) == 1 and CFG.get("proc_list", "").strip()) else "proxy", "auto_detect_interface": True, "default_domain_resolver": "local"}}
         TUN_CFG_PATH = os.path.abspath("netpulse_sb_active.json")
         with open(TUN_CFG_PATH, "w", encoding="utf-8") as f: json.dump(sb_cfg, f, indent=2)
         try:
@@ -968,7 +972,11 @@ def connect_vpn(uri, label):
     out = build_out(clean_uri, "proxy")
     if not out: add_log("Ошибка Xray: невалидный формат ссылки"); return False
     port = pick_bind_port(CFG.get("px_port", 10809))
-    cfg = {"log": {"loglevel": "info"}, "dns": {"servers": ["localhost"]}, "inbounds": [{"tag": "http", "port": port, "listen": "127.0.0.1", "protocol": "http", "sniffing": {"enabled": True, "destOverride": ["http", "tls"]}}], "outbounds": [out]}
+    if CFG.get("tls_frag", False):
+        out.setdefault("streamSettings", {})["sockopt"] = {"dialerProxy": "frag"}
+        outs_xr = [out, {"tag": "frag", "protocol": "freedom", "settings": {"fragment": {"packets": "tlshello", "length": "10-20", "interval": "10-20"}}}]
+    else: outs_xr = [out]
+    cfg = {"log": {"loglevel": "info"}, "dns": {"servers": ["localhost"]}, "inbounds": [{"tag": "http", "port": port, "listen": "127.0.0.1", "protocol": "http", "sniffing": {"enabled": True, "destOverride": ["http", "tls"]}}], "outbounds": outs_xr}
     TUN_CFG_PATH = os.path.abspath("netpulse_xray_active.json")
     with open(TUN_CFG_PATH, "w", encoding="utf-8") as f: json.dump(cfg, f, indent=2)
     try:
@@ -1125,7 +1133,7 @@ def manage_servers():
         indexed = list(enumerate(all_rows, 1))
         if flt:
             if flt == "★": indexed = [(i, ln) for i, ln in indexed if first(ln.split("#"), ln) in fav_bases]
-            else: indexed = [(i, ln) for i, ln in indexed if flt in ln.upper()]
+            else: indexed = [(i, ln) for i, ln in indexed if (len(flt) == 2 and flt.isalpha() and parse_row_info(ln)[2].split('+')[0].upper() == flt) or ((len(flt) != 2 or not flt.isalpha()) and flt in ln.upper())]
         tot_p = max(1, (len(indexed) + per_page - 1) // per_page)
         page = max(0, min(page, tot_p - 1))
         chunk = indexed[page * per_page:(page + 1) * per_page]
@@ -1176,7 +1184,7 @@ def manage_servers():
         elif cmd == "T":
             CFG["tun"] = not CFG.get("tun", False); save_cfg(); add_log(f"Режим VPN: {'TUN-Split' if CFG['tun'] else 'Proxy'}")
             if CFG["tun"] and not is_admin() and ru2en(input(f"\n{c}[!] Нужны права Админа. Перезапустить? (Y/N) > {RST}").strip()).upper() == "Y":
-                disconnect_vpn(); ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(f'"{a}"' for a in (sys.argv[1:] if getattr(sys, "frozen", False) else sys.argv)), None, 1); sys.exit(0)
+                disconnect_vpn(); sys.stdout.write("\033[?25h"); ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(f'"{a}"' for a in (sys.argv[1:] if getattr(sys, "frozen", False) else sys.argv)), None, 1); sys.exit(0)
         elif cmd == "D": disconnect_vpn(); print("[*] VPN отключен."); time.sleep(0.8)
         elif cmd == "A":
             print(f"\n{c}[1/2] Бережная проверка отклика {len(all_rows)} серверов (4 потока, 2 попытки)...{RST}")
@@ -1219,14 +1227,14 @@ def manage_servers():
             else:
                 for idx, base, sc, cc, ms in alive_tmp:
                     scored_rows.append((0.0, ms, idx, f"{base}#{sc}_{cc}_{ms}ms"))
-            scored_rows.sort(key=lambda t: (-t, t, t))
+            scored_rows.sort(key=lambda t: (-t.__getitem__(0), t.__getitem__(1), t.__getitem__(2)))
             new_rows = [res_ln for _, _, _, res_ln in scored_rows]
             with open("best_configs.txt", "w", encoding="utf-8") as f: f.write("\n".join(new_rows))
             add_log(f"Умная проверка: живых {len(new_rows)}, удалено {dead_cnt}")
             print(f"\n{c}[+] Готово! Живых: {len(new_rows)} | Удалено: {dead_cnt}{RST}"); time.sleep(1.5)
         elif cmd.isdigit() and 1 <= int(cmd) <= len(all_rows):
             idx = int(cmd) - 1; base, sc, cc, ms, spd, tag = parse_row_info(all_rows[idx]); is_fav = base in fav_bases
-            print(f"\n{c}Сервер #{idx + 1}: {sc} | {cc} | {ms} | {spd}{RST}\n  1. Подключить VPN  2. Тест (Пинг+Страна+Скорость)  3. Копировать  4. Удалить  5. {'Убрать ★' if is_fav else 'В Избранное ★'}  6. Глубокий тест (3 пинга + YT + AI)  7. Тест 4K + Leak")
+            print(f"\n{c}Сервер #{idx + 1}: {sc} | {cc} | {ms} | {spd.replace('Mbps', 'M'):<6}{RST}\n  1. Подключить VPN  2. Тест (Пинг+Страна+Скорость)  3. Копировать  4. Удалить  5. {'Убрать ★' if is_fav else 'В Избранное ★'}  6. Глубокий тест (3 пинга + YT + AI)  7. Тест 4K + Leak  8. QR-код")
             act = input("> ").strip()
             if act == "1": print(f"{c}[+] Подключено!{RST}" if connect_vpn(base, f"#{idx + 1} {sc}_{cc}") else "\033[91m[!] Ошибка запуска.\033[0m"); time.sleep(1.3)
             elif act == "2":
@@ -1240,11 +1248,11 @@ def manage_servers():
                 time.sleep(1.2)
             elif act == "3": subprocess.run("clip", input=all_rows[idx].encode("utf-8"), check=False); print("  [+] Скопировано!"); time.sleep(0.8)
             elif act == "4": all_rows.pop(idx); open("best_configs.txt", "w", encoding="utf-8").write("\n".join(all_rows))
-        elif act == "5":
-                favs = [x for x in favs if first(x.split("#"), x) != base] if is_fav else favs + [all_rows[idx]]
-                save_favs(favs); print(f"  {c}[+] Избранное обновлено!{RST}"); time.sleep(0.8)
-        elif act == "6":
-                print("  Запуск глубокого теста (3 пинга, Jitter, YouTube, ChatGPT)...")
+            elif act == "5":
+                if is_fav: favs = [x for x in favs if first(x.split("#"), x) != base]
+                else: favs.insert(0, all_rows[idx])
+                save_favs(favs)
+            elif act == "6":
                 dt = deep_test_node(base)
                 if dt:
                     yt_s = f"{c}OK{RST}" if dt["yt"] else "\033[91mNO\033[0m"
@@ -1252,15 +1260,16 @@ def manage_servers():
                     print(f"  {c}[+] Пакеты: {dt['ok']}/3 | Ср. пинг: {dt['avg']}ms | Jitter: {dt['jitter']}ms | YouTube: {yt_s} | ChatGPT: {ai_s}{RST}")
                 else: print("  \033[91m[!] Узел не прошёл глубокий тест.\033[0m")
                 input("  Enter...")
-        elif act == "7":
-            print("  Замер реального видеопотока (4K/1080p) и проверка утечки IP...")
-            t_v = time.time()
-            v_spd = run_single_test(base, True, False)
-            cc_chk, ip_chk, _ = fetch_trace_info(None if CFG.get("tun", False) else {"http": f"http://127.0.0.1:{CFG.get('px_port', 10809)}", "https": f"http://127.0.0.1:{CFG.get('px_port', 10809)}"}, 3.0, True)
-            q_verdict = "\033[96mYouTube 4K60 ULTRA\033[0m" if v_spd >= 35 else ("\033[92m1080p FullHD OK\033[0m" if v_spd >= 12 else "\033[93m720p / Базовый\033[0m")
-            leak_s = "\033[91mУТЕЧКА RU IP!\033[0m" if (ip_chk and ip_chk == REAL_HOME_IP) else "\033[92mIP защищён (OK)\033[0m"
-            print(f"  {c}[+] Поток: {v_spd} Mbps ({q_verdict}) | Защита: {leak_s} ({time.time() - t_v:.1f}с){RST}")
-            input("  Enter...")
+            elif act == "7":
+                print("  Замер реального видеопотока (4K/1080p) и проверка утечки IP...")
+                t_v = time.time()
+                v_spd = run_single_test(base, True, False)
+                cc_chk, ip_chk, _ = fetch_trace_info(None if CFG.get("tun", False) else {"http": f"http://127.0.0.1:{CFG.get('px_port', 10809)}", "https": f"http://127.0.0.1:{CFG.get('px_port', 10809)}"}, 3.0, True)
+                q_verdict = "\033[96mYouTube 4K60 ULTRA\033[0m" if v_spd >= 35 else ("\033[92m1080p FullHD OK\033[0m" if v_spd >= 12 else "\033[93m720p / Базовый\033[0m")
+                leak_s = "\033[91mУТЕЧКА RU IP!\033[0m" if (ip_chk and ip_chk == REAL_HOME_IP) else "\033[92mIP защищён (OK)\033[0m"
+                print(f"  {c}[+] Поток: {v_spd} Mbps ({q_verdict}) | Защита: {leak_s} ({time.time() - t_v:.1f}с){RST}")
+                input("  Enter...")
+            elif act == "8": show_qr_ui(all_rows.__getitem__(idx), f"#{idx + 1} {sc}_{cc}")
         else:
             flt, page = cmd, 0
 
@@ -1290,12 +1299,105 @@ class SubHandler(BaseHTTPRequestHandler):
         else: self.send_response(404); self.end_headers()
     def log_message(self, *a): pass
 
+def show_qr_ui(uri, label):
+    c = CFG["color"]
+    try:
+        import segno
+    except ImportError:
+        print(f"{c}[*] Установка компактного модуля QR-кодов...{RST}")
+        subprocess.run([sys.executable, "-m", "pip", "install", "-q", "segno"], check=False)
+        import segno
+    os.system("cls" if os.name == "nt" else "clear")
+    print(f"{c}╔{'═' * 72}╗\n{box_row(f'QR-КОД ДЛЯ ТЕЛЕФОНА • {label}', c)}\n╚{'═' * 72}╝{RST}\n")
+    qr = segno.make(uri, error="L")
+    for row in qr.matrix:
+        line = "".join("██" if cell else "  " for cell in row)
+        print(f"    \033[97m{line}{RST}")
+    print(f"\n{c}Отсканируйте камерой в v2rayNG / Hiddify / Streisand!{RST}")
+    input("\nНажмите Enter для возврата...")
+
+def set_win_autostart(enable, in_tray=False):
+    try:
+        key = winreg.OpenKey(winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Run", 0, winreg.KEY_SET_VALUE)
+        if enable:
+            sp = os.path.abspath(first(sys.argv, "netpulse.py"))
+            arg = " --tray" if in_tray else ""
+            winreg.SetValueEx(key, "NETPULSE", 0, winreg.REG_SZ, f'"{sys.executable}" "{sp}"{arg}')
+        else:
+            try: winreg.DeleteValue(key, "NETPULSE")
+            except Exception: pass
+        winreg.CloseKey(key)
+    except Exception: pass
+
+def autostart_ui():
+    c = CFG["color"]
+    while True:
+        os.system("cls" if os.name == "nt" else "clear")
+        as_s = tr("on") if CFG.get("autostart", False) else tr("off")
+        tr_s = tr("on") if CFG.get("start_tray", False) else tr("off")
+        cc_v = CFG.get("auto_conn_cc", "")
+        ac_s = "ВЫКЛ (просто запуск)" if not cc_v else ("Любой лучший сервер" if cc_v == "ANY" else f"Страна: {cc_v}")
+        print(f"{c}╔{'═' * 72}╗\n{box_row('АВТОЗАПУСК WINDOWS И АВТОПОДКЛЮЧЕНИЕ', c)}\n╚{'═' * 72}╝{RST}")
+        print(f"  1. Запускать NETPULSE при старте Windows:  {c}[{as_s}]{RST}")
+        print(f"  2. Запускать сразу свёрнутым в Трей:      {c}[{tr_s}]{RST}")
+        print(f"  3. Автоподключение при запуске:           {c}[{ac_s}]{RST}")
+        print("  0. Назад")
+        sel = input("\n> ").strip()
+        if not sel or sel == "0": break
+        elif sel == "1": CFG["autostart"] = not CFG.get("autostart", False); set_win_autostart(CFG["autostart"], CFG.get("start_tray", False)); save_cfg()
+        elif sel == "2": CFG["start_tray"] = not CFG.get("start_tray", False); set_win_autostart(CFG.get("autostart", False), CFG["start_tray"]); save_cfg()
+        elif sel == "3":
+            v = ru2en(input("Введите код страны (напр. DE, NL, FI), ANY = любой лучший, 0 = ВЫКЛ > ").strip()).upper()
+            CFG["auto_conn_cc"] = "" if v == "0" else ("ANY" if v == "ANY" else (v if len(v) == 2 and v.isalpha() else CFG.get("auto_conn_cc", "")))
+            save_cfg()
+
+def auto_connect_on_boot():
+    cc_pref = CFG.get("auto_conn_cc", "")
+    if not cc_pref or not os.path.exists("best_configs.txt"): return
+    rows = [ln.strip() for ln in open("best_configs.txt", encoding="utf-8") if ln.strip()]
+    for idx, ln in enumerate(rows):
+        b, sc, cc, _, _, _ = parse_row_info(ln)
+        if cc_pref == "ANY" or cc.split("+").__getitem__(0) == cc_pref:
+            if connect_vpn(b, f"#{idx + 1} {sc}_{cc}"): break
+
 def make_shortcut():
     desk = os.path.join(os.path.expanduser("~"), "Desktop")
     if not os.path.exists(desk): desk = os.path.join(os.path.expanduser("~"), "OneDrive", "Desktop")
-    with open(os.path.join(desk, "NETPULSE.bat"), "w", encoding="utf-8") as f:
-        f.write(f'@echo off\nchcp 65001 >nul\ncd /d "{os.path.dirname(os.path.abspath(first(sys.argv, "netpulse.py")))}"\n"{sys.executable}" "{os.path.basename(first(sys.argv, "netpulse.py"))}"\n')
-    print(f"\n{CFG['color']}{tr('bat_ok')}{RST}")
+    work_dir = os.path.dirname(os.path.abspath(first(sys.argv, "netpulse.py")))
+    script_path = os.path.join(work_dir, os.path.basename(first(sys.argv, "netpulse.py")))
+    ico_path = os.path.join(work_dir, "netpulse.ico")
+    if not os.path.exists(ico_path):
+        try:
+            px = bytearray()
+            for y in range(16):
+                for x in range(16):
+                    border = x in (0, 15) or y in (0, 15)
+                    let_n = (x in (4, 5, 10, 11) and 3 <= y <= 12) or (x - y == 2 and 4 <= y <= 11)
+                    if border: px += b"\xff\x4f\x8a\xff"
+                    elif let_n: px += b"\xff\xe5\x00\xff"
+                    else: px += b"\x18\x11\x11\xff"
+            hdr = struct.pack("<HHHBBBBHHII", 0, 1, 1, 16, 16, 0, 0, 1, 32, 40 + len(px) + 64, 22)
+            bmp = struct.pack("<IIIHHIIIIII", 40, 16, 32, 1, 32, 0, len(px) + 64, 0, 0, 0, 0)
+            with open(ico_path, "wb") as f: f.write(hdr + bmp + px + (b"\x00" * 64))
+        except Exception: pass
+    lnk_path = os.path.join(desk, "NETPULSE.lnk")
+    ps_cmd = (
+        f"$ws = New-Object -ComObject WScript.Shell; "
+        f"$sc = $ws.CreateShortcut('{lnk_path}'); "
+        f"$sc.TargetPath = '{sys.executable}'; "
+        f"$sc.Arguments = '\"{script_path}\"'; "
+        f"$sc.WorkingDirectory = '{work_dir}'; "
+        f"$sc.Description = 'NETPULSE V2.0 VPN & Proxy Manager'; "
+        f"if (Test-Path '{ico_path}') {{ $sc.IconLocation = '{ico_path},0' }}; "
+        f"$sc.Save()"
+    )
+    subprocess.run(["powershell", "-NoProfile", "-Command", ps_cmd], check=False)
+    old_bat = os.path.join(desk, "NETPULSE.bat")
+    if os.path.exists(old_bat):
+        try: os.remove(old_bat)
+        except Exception: pass
+    print(f"\n{CFG['color']}[+] Ярлык NETPULSE.lnk с иконкой создан на Рабочем столе!{RST}")
+
 def finalize_results(work, all_sources, bl, append_existing=False, run_collected=None, auto_bg=False):
     global SUB_MAP
     c_col, db = CFG["color"], load_src_db()
@@ -1363,11 +1465,11 @@ def finalize_results(work, all_sources, bl, append_existing=False, run_collected
     try: winsound.Beep(880, 180); winsound.Beep(1174, 240)
     except Exception: pass
     s_port = CFG.get("sub_port", 18080)
-    top_spd = fin.split("_").pop() if fin and "Mbps" in fin else "-"
+    top_spd = fin.__getitem__(0).split("_").pop() if fin and "Mbps" in fin.__getitem__(0) else "-"
     top_ccs = ", ".join(k.upper() for k in list(by_cc.keys())[:4]) or "MIX"
     print(f"\n{c_col}╔{'═' * 72}╗\n║  \033[92m✔ {tr('done')} {len(fin):<6}\033[0m {c_col}│ Рекорд: \033[96m{top_spd:<10}\033[0m {c_col}│ Страны: \033[93m{top_ccs:<16}\033[0m{c_col}║\n║  {tr('url')} http://127.0.0.1:{s_port}/sub | /clash | /sb{' ' * 16}║\n╚{'═' * 72}╝{RST}")
     if by_cc: print(f"{c_col}By country: [{' | '.join(f'/{cc}' for cc in sorted(by_cc.keys()))}]{RST}")
-    srv = HTTPServer(("127.0.0.1", s_port), SubHandler); threading.Thread(target=srv.serve_forever, daemon=True).start()
+    srv = ThreadingHTTPServer(("127.0.0.1", s_port), SubHandler); threading.Thread(target=srv.serve_forever, daemon=True).start()
     print("Enter -> Menu")
     try: input()
     except KeyboardInterrupt: pass
@@ -1613,27 +1715,26 @@ TRAY_HWND = None
 class IO_COUNTERS(ctypes.Structure):
     _fields_ = [("ReadOperationCount", ctypes.c_uint64), ("WriteOperationCount", ctypes.c_uint64), ("OtherOperationCount", ctypes.c_uint64), ("ReadTransferCount", ctypes.c_uint64), ("WriteTransferCount", ctypes.c_uint64), ("OtherTransferCount", ctypes.c_uint64)]
 
-LAST_IO = [0.0, 0, 0, 0.0, 0.0, 0]
+IO_STATE = {"t": 0.0, "rx": 0, "tx": 0, "dl": 0.0, "ul": 0.0}
 
 def get_vpn_traffic():
-    global LAST_IO
     if not ACTIVE_PROC or ACTIVE_PROC.poll() is not None:
-        LAST_IO = [0.0, 0, 0, 0.0, 0.0, 0]
-        return "0.0 Mbps", "0.0 Mbps", "0 MB"
+        IO_STATE.update({"t": 0.0, "rx": 0, "tx": 0, "dl": 0.0, "ul": 0.0})
+        return "0.0M", "0.0M", "0MB"
     try:
         ioc = IO_COUNTERS()
         if ctypes.windll.kernel32.GetProcessIoCounters(int(ACTIVE_PROC._handle), ctypes.byref(ioc)):
             now = time.time()
-            rx, tx = ioc.ReadTransferCount, ioc.WriteTransferCount
-            if LAST_IO > 0 and now - LAST_IO >= 0.4:
-                dt = now - LAST_IO
-                LAST_IO = max(0.0, ((rx - LAST_IO) * 8) / (dt * 1_000_000))
-                LAST_IO = max(0.0, ((tx - LAST_IO) * 8) / (dt * 1_000_000))
-                LAST_IO, LAST_IO, LAST_IO = now, rx, tx
-            elif LAST_IO == 0:
-                LAST_IO, LAST_IO, LAST_IO = now, rx, tx
+            rx, tx = int(ioc.ReadTransferCount), int(ioc.WriteTransferCount)
+            if IO_STATE["t"] > 0 and now - IO_STATE["t"] >= 0.4:
+                dt = now - IO_STATE["t"]
+                IO_STATE["dl"] = max(0.0, ((rx - IO_STATE["rx"]) * 8) / (dt * 1_000_000))
+                IO_STATE["ul"] = max(0.0, ((tx - IO_STATE["tx"]) * 8) / (dt * 1_000_000))
+                IO_STATE.update({"t": now, "rx": rx, "tx": tx})
+            elif IO_STATE["t"] == 0:
+                IO_STATE.update({"t": now, "rx": rx, "tx": tx})
             tot_mb = (rx + tx) / (1024 * 1024)
-            return f"{LAST_IO:.1f}M", f"{LAST_IO:.1f}M", f"{tot_mb:.1f}MB"
+            return f"{IO_STATE['dl']:.1f}M", f"{IO_STATE['ul']:.1f}M", f"{tot_mb:.1f}MB"
     except Exception: pass
     return "0.0M", "0.0M", "0MB"
 
@@ -1652,9 +1753,9 @@ def start_hud_overlay():
         root = tk.Tk()
         root.overrideredirect(True)
         root.attributes("-topmost", True)
-        root.attributes("-alpha", 0.90)
-        root.configure(bg="#111118", highlightthickness=1, highlightbackground="#8A4FFF")
-        lbl = tk.Label(root, text="NETPULSE • VPN: OFF", font=("Consolas", 11, "bold"), fg="#8A4FFF", bg="#111118", padx=12, pady=4)
+        root.attributes("-alpha", 1.0)
+        root.configure(bg="#0B0B12", highlightthickness=2, highlightbackground="#8A4FFF")
+        lbl = tk.Label(root, text="NETPULSE • VPN: OFF", font=("Consolas", 11, "bold"), fg="#8A4FFF", bg="#0B0B12", padx=14, pady=5)
         lbl.pack()
         root.update_idletasks()
         hwnd = u32.GetParent(root.winfo_id()) or root.winfo_id()
@@ -1816,7 +1917,7 @@ def customize_ui():
                 else:
                     nums = [int(x) for x in re.findall(r'\d+', raw_rgb)]
                     if len(nums) >= 3 and all(0 <= v <= 255 for v in nums[:3]):
-                        CFG["color"], CFG["cname"] = f"\033[38;2;{nums};{nums};{nums}m", f"RGB({nums},{nums},{nums})"
+                        CFG["color"], CFG["cname"] = f"\033[38;2;{nums.__getitem__(0)};{nums.__getitem__(1)};{nums.__getitem__(2)}m", f"RGB({nums.__getitem__(0)},{nums.__getitem__(1)},{nums.__getitem__(2)})"
         elif act == "2":
             bsel = input("\nФон: 1.Пульс 2.Матрица 3.Поток 4.Звезды 5.Радар 6.ДНК 7.Дождь 8.Волны 9.Искры 10.Сканер 0.Выкл > ").strip()
             if bsel.isdigit() and 0 <= int(bsel) <= 10: CFG["bg"] = int(bsel)
@@ -1841,8 +1942,8 @@ def customize_ui():
 
 def build_right_panel(c, panel_w):
     if panel_w < 38: return list()
-    inner = panel_w - 4
-    rows = [ln.strip() for ln in open("best_configs.txt", "r", encoding="utf-8") if ln.strip()] if os.path.exists("best_configs.txt") else list()
+    w = panel_w - 2
+    rows = [ln.strip() for ln in open("best_configs.txt", encoding="utf-8") if ln.strip()] if os.path.exists("best_configs.txt") else list()
     favs = load_favs()
     x_ok = bool(CFG.get("xray") and os.path.exists(CFG.get("xray", "")))
     s_ok = bool(CFG.get("singbox") and os.path.exists(CFG.get("singbox", "")))
@@ -1852,18 +1953,18 @@ def build_right_panel(c, panel_w):
     ip_s = f"{ACTIVE_CC} ({ACTIVE_IP})" if ACTIVE_IP else ("TUN Active" if ACTIVE_NAME else "Не подключен")
     rx_s, tx_s, tot_s = get_vpn_traffic()
     box = [
-        f"{c}╔{'═' * (panel_w - 2)}╗{RST}",
-        f"{c}║ {'LIVE DASHBOARD • TELEMETRY':<{inner}} {c}║{RST}",
-        f"{c}╠{'═' * (panel_w - 2)}╣{RST}",
-        f"{c}║ {RST}{f'Режим: {mode_s} | {cores_s}'[:inner]:<{inner}}{c} ║{RST}",
-        f"{c}║ {RST}{f'Статус: {ip_s} | Аптайм: {up_s}'[:inner]:<{inner}}{c} ║{RST}",
-        f"{c}║ {RST}{f'Сеть: ↓{rx_s} ↑{tx_s} ({tot_s}) | База:{len(rows)} | FO:{FAILOVER_CNT}'[:inner]:<{inner}}{c} ║{RST}",
-        f"{c}╠{'═' * (panel_w - 2)}╣{RST}",
-        f"{c}║ {'TOP-5 СЕРВЕРОВ [T1-T5 Пуск | D Стоп]':<{inner}} {c}║{RST}",
-        f"{c}╟{'─' * (panel_w - 2)}╢{RST}"
+        f"{c}╔{'═' * w}╗{RST}",
+        box_row("LIVE DASHBOARD • TELEMETRY", c, w),
+        f"{c}╠{'═' * w}╣{RST}",
+        box_row(f"{RST}Режим: {mode_s} | {cores_s}", c, w),
+        box_row(f"{RST}Статус: {ip_s} | Up: {up_s}", c, w),
+        box_row(f"{RST}Сеть: DL {rx_s} | UL {tx_s} | Всего: {tot_s}", c, w),
+        f"{c}╠{'═' * w}╣{RST}",
+        box_row("TOP-5 СЕРВЕРОВ [T1-T5 Пуск | D Стоп]", c, w),
+        f"{c}╟{'─' * w}╢{RST}"
     ]
     if not rows:
-        box.append(f"{c}║ {DIM}{'Список пуст — запустите поиск':<{inner}}{RST}{c} ║{RST}")
+        box.append(box_row(f"{DIM}Список пуст — запустите поиск{RST}", c, w))
     else:
         for i in range(5):
             if i < len(rows):
@@ -1872,18 +1973,18 @@ def build_right_panel(c, panel_w):
                 sc_c = "\033[96m" if sc == "VLESS" else ("\033[95m" if sc == "HY2" else "\033[93m")
                 p_v = int(ms[:-2]) if ms.endswith("ms") and ms[:-2].isdigit() else 9999
                 ms_c = "\033[92m" if p_v <= 250 else ("\033[93m" if p_v <= 650 else "\033[91m")
-                pad = " " * max(0, inner - len(f"T{i + 1} │ {sc:<6} │ {cc:<5} │ {ms:<7} │ {spd}{act_m}"))
-                box.append(f"{c}║ \033[97mT{i + 1}{RST} │ {sc_c}{sc:<6}{RST} │ \033[92m{cc:<5}{RST} │ {ms_c}{ms:<7}{RST} │ \033[96m{spd}{RST}{c}{act_m}{RST}{pad}{c} ║{RST}")
+                row_s = f"\033[97mT{i + 1}{RST} | {sc_c}{sc:<6}{RST} | \033[92m{cc:<4}{RST} | {ms_c}{ms:<6}{RST} | \033[96m{spd.replace('Mbps', 'M'):<6}{RST}{c}{act_m}{RST}"
+                box.append(box_row(row_s, c, w))
             else:
-                box.append(f"{c}║ {' ' * inner} ║{RST}")
-    box.append(f"{c}╠{'═' * (panel_w - 2)}╣{RST}")
-    box.append(f"{c}║ {'ЖУРНАЛ СОБЫТИЙ (LIVE LOG)':<{inner}} {c}║{RST}")
-    box.append(f"{c}╟{'─' * (panel_w - 2)}╢{RST}")
+                box.append(box_row("", c, w))
+    box.append(f"{c}╠{'═' * w}╣{RST}")
+    box.append(box_row("ЖУРНАЛ СОБЫТИЙ (LIVE LOG)", c, w))
+    box.append(f"{c}╟{'─' * w}╢{RST}")
     with LOG_LOCK: snap = list(VPN_LOG[-4:])
     for i in range(4):
         lg = snap[i] if i < len(snap) else ("(ожидание событий...)" if i == 0 else "")
-        box.append(f"{c}║ {DIM}{lg[:inner]:<{inner}}{RST}{c} ║{RST}")
-    box.append(f"{c}╚{'═' * (panel_w - 2)}╝{RST}")
+        box.append(box_row(f"{DIM}{lg[:w - 2]}{RST}", c, w))
+    box.append(f"{c}╚{'═' * w}╝{RST}")
     return box
 
 def show_menu():
@@ -1910,7 +2011,7 @@ def show_menu():
                     rem_c = max(0, len(c_info.get("nodes", list())) - c_info.get("offset", 0))
                     cache_tag = f" [Кэш: {rem_c}]" if rem_c > 0 else ""
                     repo_tag = f" [★{sum(1 for v in db.values() if v.get('prio', False))} / {len(db)}]"
-                    r_panel_cache = build_right_panel(c, min(56, term_w - 79)) if term_w >= 116 else list()
+                    r_panel_cache = build_right_panel(c, min(54, term_w - 81)) if term_w >= 116 else list()
                 c_str = ", ".join(sorted(CFG["countries"])) if CFG["countries"] else tr("all")
                 p_set = parse_proto_set(CFG.get("proto", ""))
                 p_str = "+".join(x.upper() for x in sorted(p_set)) if p_set else "ВСЕ"
@@ -2006,9 +2107,20 @@ def show_menu():
                             p_parsed = parse_proto_set(ru2en(input("> ").strip()))
                             CFG["proto"] = "+".join(sorted(p_parsed)) if p_parsed else ""; save_cfg()
                     elif ch == "9":
-                        g_sel = input("  1. GeoIP\n  2. Strict Anti-DPI (IP)\n> ").strip()
+                        pm_lbl = {0: "ВЫКЛ (весь трафик)", 1: "Только указанные .exe", 2: "Все, кроме указанных .exe"}.get(CFG.get("proc_mode", 0), "ВЫКЛ")
+                        g_sel = input(f"  1. GeoIP\n  2. Strict Anti-DPI (IP)\n  3. TLS Fragment (Обход ТСПУ): [{tr('on') if CFG.get('tls_frag', False) else tr('off')}]\n  4. Роутинг по .exe (TUN): [{pm_lbl}]\n> ").strip()
                         if g_sel == "1" and not CFG["countries"]: CFG["geoip"] = not CFG.get("geoip", True); save_cfg()
                         elif g_sel == "2": CFG["strict_ip"] = not CFG.get("strict_ip", True); save_cfg()
+                        elif g_sel == "3": CFG["tls_frag"] = not CFG.get("tls_frag", False); save_cfg()
+                        elif g_sel == "4":
+                            pm = input("  0. Выкл  1. Только выбранные .exe через VPN  2. Исключить .exe из VPN > ").strip()
+                            if pm in ("0", "1", "2"):
+                                CFG["proc_mode"] = int(pm)
+                                if CFG["proc_mode"] in (1, 2):
+                                    cur_p = CFG.get("proc_list", "")
+                                    np = input(f"Имена .exe через запятую (напр. discord.exe, chrome.exe) [{cur_p}] > ").strip()
+                                    if np: CFG["proc_list"] = np
+                                save_cfg()
                     elif ch == "10": CFG["target"] = 1 if CFG.get("target", 1) == 3 else CFG.get("target", 1) + 1; save_cfg()
                     elif ch == "11":
                         sc_cpu = input("  1. Замер скорости\n  2. ЦП (2x20 -> 4x25 -> 6x25)\n> ").strip()
@@ -2030,7 +2142,7 @@ def show_menu():
                         save_cfg()
                     elif ch == "13": customize_ui()
                     elif ch == "14":
-                        sub_s = input("  1. Язык (RU/EN)  2. Ярлык  3. GitHub Token  4. Порт подписки  5. Скачать ядра\n> ").strip()
+                        sub_s = input("  1. Язык (RU/EN)  2. Ярлык  3. GitHub Token  4. Порт подписки  5. Скачать ядра  6. Автозапуск Windows\n> ").strip()
                         if sub_s == "1": CFG["lang"] = "EN" if CFG["lang"] == "RU" else "RU"; save_cfg()
                         elif sub_s == "2": make_shortcut(); input(f"\n{tr('back')}")
                         elif sub_s == "3": CFG["token"] = input("Token > ").strip(); save_cfg()
@@ -2038,6 +2150,7 @@ def show_menu():
                             sp_val = input("Port (1024-65535) > ").strip()
                             if sp_val.isdigit() and 1024 <= int(sp_val) <= 65535: CFG["sub_port"] = int(sp_val); save_cfg()
                         elif sub_s == "5": download_cores(True); input(f"\n{tr('back')}")
+                        elif sub_s == "6": autostart_ui()
                     elif ch == "15":
                         t_map = {"0": 0, "1": 30, "2": 60, "3": 180, "4": 360, "5": 720}
                         t_sel = input("  Авто-поиск: 0.Выкл | 1.30м | 2.1ч | 3.3ч | 4.6ч | 5.12ч > ").strip()
@@ -2048,6 +2161,9 @@ def show_menu():
                 time.sleep(0.012)
     finally: disconnect_vpn(); sys.stdout.write("\033[?25h")
 
+if CFG.get("overlay", False): start_hud_overlay()
+threading.Thread(target=auto_connect_on_boot, daemon=True).start()
+if "--tray" in sys.argv: threading.Thread(target=lambda: (time.sleep(0.6), minimize_to_tray()), daemon=True).start()
 threading.Thread(target=failover_loop, daemon=True).start(); threading.Thread(target=auto_heal_loop, daemon=True).start()
 try: show_menu()
 except KeyboardInterrupt: disconnect_vpn(); sys.stdout.write("\033[?25h")
