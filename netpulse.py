@@ -171,7 +171,7 @@ def find_cores():
     return CFG.get("xray", ""), CFG.get("singbox", "")
 
 def get_hdr():
-    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/5.3"}
+    h = {"Accept": "application/vnd.github.v3+json", "User-Agent": "NetPulse/5.4"}
     if CFG.get("token"): h["Authorization"] = f"Bearer {CFG['token']}"
     return h
 
@@ -235,8 +235,8 @@ COUNTRIES_INFO = [("DE", "Германия / Germany"), ("NL", "Нидерлан
 RST, DIM = "\033[0m", "\033[2m"
 
 TXT = {
-    "RU": {"sub": "Умный агрегатор и VPN-менеджер v5.3", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск / Допроверить кэш", "m2": "2. Проверить буфер обмена (Clipboard Scan)", "m3": "3. Менеджер серверов (VPN / TUN / Трафик-лог)", "m4": "4. Рейтинг репозиториев и Приоритет скана", "m5": "5. Защита от белых списков (CDN + RU-SNI)", "m6": "6. Источники / Язык баз / Карантин", "m7": "7. Прокси v2rayN для парсинга", "m8": "8. Страны и Протокол поиска", "m9": "9. GeoIP / Strict Anti-DPI (Смена IP)", "m10": "10. Цель проверки (Сайт)", "m11": "11. Замер скорости / Нагрузка на ЦП", "m12": "12. Репы / Допуск в [4/5] / Лимит", "m13": "13. Кастомизация (Цвет и Фон)", "m14": "14. Язык / Ярлык / Ядра / Токен / Порт", "m0": "0. Выход", "ask": "Выберите пункт меню > ", "all": "ВСЕ СТРАНЫ", "on": "ВКЛ", "off": "ВЫКЛ", "unit": "узл/с", "wl_m": {0: "АВТО (CDN)", 1: "Приоритет RU-SNI", 2: "Строго RU-SNI"}, "srcs": {0: "ВСЕ (GH+TG+Web)", 1: "Только GH", 2: "Только TG+Web", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "Только RU", 2: "Только EN"}, "protos": {0: "ВСЕ", 1: "VLESS", 2: "Trojan", 3: "SS", 4: "HY2/TUIC"}, "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 4: "Звезды", 5: "Радар", 0: "Выкл"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Сбор источников (GitHub / CDN / TG / Web)...", "s2": "[2/5] Скачивание и парсинг", "s3": "[3/5] Умный фильтр и TCP-отсев", "s4": "[4/5] Турбо-проверка (Ctrl+C = Стоп)", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Рабочих серверов:", "url": "Подписки:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "no_xray": "[!] Ядра не найдены! Скачать автоматически с GitHub? (Y/N) > "},
-    "EN": {"sub": "Smart Aggregator & VPN Manager v5.3", "auth": "Authors: Gemini & Glitch", "m1": "1. Start Scan / Resume TCP Cache", "m2": "2. Clipboard Scan (Paste & Test)", "m3": "3. Server Manager (VPN / TUN / Traffic Log)", "m4": "4. Repo Leaderboard & Scan Priority", "m5": "5. Whitelist Shield (CDN + RU-SNI)", "m6": "6. Sources / Repo Lang / Quarantine", "m7": "7. v2rayN Proxy for Scraping", "m8": "8. Countries & Target Protocol", "m9": "9. GeoIP / Strict Anti-DPI (IP Check)", "m10": "10. Validation Target Site", "m11": "11. Speed Test / CPU Load Mode", "m12": "12. Repos / [4/5] Cap / Limit", "m13": "13. Customization (Color & BG)", "m14": "14. Lang / Shortcut / Cores / Token / Port", "m0": "0. Exit", "ask": "Select option > ", "all": "ALL", "on": "ON", "off": "OFF", "unit": "nodes/s", "wl_m": {0: "AUTO (CDN)", 1: "Priority RU-SNI", 2: "Strict RU-SNI"}, "srcs": {0: "ALL (GH+TG+Web)", 1: "GH Only", 2: "TG+Web Only", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "RU Only", 2: "EN Only"}, "protos": {0: "ALL", 1: "VLESS", 2: "Trojan", 3: "SS", 4: "HY2/TUIC"}, "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 4: "Stars", 5: "Radar", 0: "Off"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Collecting sources (GitHub / CDN / TG / Web)...", "s2": "[2/5] Downloading & parsing", "s3": "[3/5] Smart filter & TCP check", "s4": "[4/5] Turbo batch check (Ctrl+C = Stop)", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Subscriptions:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "no_xray": "[!] Cores not found! Download automatically from GitHub? (Y/N) > "}
+    "RU": {"sub": "Умный агрегатор и VPN-менеджер v5.4", "auth": "Авторы: Gemini & Glitch", "m1": "1. Запустить поиск / Допроверить кэш", "m2": "2. Проверить буфер обмена (Clipboard Scan)", "m3": "3. Менеджер серверов (VPN / TUN / Трафик-лог)", "m4": "4. Рейтинг репозиториев и Приоритет скана", "m5": "5. Защита от белых списков (CDN + RU-SNI)", "m6": "6. Источники / Язык баз / Карантин", "m7": "7. Прокси v2rayN для парсинга", "m8": "8. Страны и Протокол поиска", "m9": "9. GeoIP / Strict Anti-DPI (Смена IP)", "m10": "10. Цель проверки (Сайт)", "m11": "11. Замер скорости / Нагрузка на ЦП", "m12": "12. Репы / Допуск в [4/5] / Лимит", "m13": "13. Кастомизация (Цвет и Фон)", "m14": "14. Язык / Ярлык / Ядра / Токен / Порт", "m0": "0. Выход", "ask": "Выберите пункт меню > ", "all": "ВСЕ СТРАНЫ", "on": "ВКЛ", "off": "ВЫКЛ", "unit": "узл/с", "wl_m": {0: "АВТО (CDN)", 1: "Приоритет RU-SNI", 2: "Строго RU-SNI"}, "srcs": {0: "ВСЕ (GH+TG+Web)", 1: "Только GH", 2: "Только TG+Web", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "Только RU", 2: "Только EN"}, "protos": {0: "ВСЕ", 1: "VLESS", 2: "Trojan", 3: "SS", 4: "HY2/TUIC"}, "bgs": {1: "Пульс", 2: "Матрица", 3: "Поток", 4: "Звезды", 5: "Радар", 0: "Выкл"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Сбор источников (GitHub / CDN / TG / Web)...", "s2": "[2/5] Скачивание и парсинг", "s3": "[3/5] Умный фильтр и TCP-отсев", "s4": "[4/5] Турбо-проверка (Ctrl+C = Стоп)", "s5": "[5/5] Замер скорости скачивания", "done": "Готово! Рабочих серверов:", "url": "Подписки:", "back": "Нажмите Enter для возврата в меню...", "bat_ok": "[+] Ярлык NETPULSE.bat создан на Рабочем столе!", "no_xray": "[!] Ядра не найдены! Скачать автоматически с GitHub? (Y/N) > "},
+    "EN": {"sub": "Smart Aggregator & VPN Manager v5.4", "auth": "Authors: Gemini & Glitch", "m1": "1. Start Scan / Resume TCP Cache", "m2": "2. Clipboard Scan (Paste & Test)", "m3": "3. Server Manager (VPN / TUN / Traffic Log)", "m4": "4. Repo Leaderboard & Scan Priority", "m5": "5. Whitelist Shield (CDN + RU-SNI)", "m6": "6. Sources / Repo Lang / Quarantine", "m7": "7. v2rayN Proxy for Scraping", "m8": "8. Countries & Target Protocol", "m9": "9. GeoIP / Strict Anti-DPI (IP Check)", "m10": "10. Validation Target Site", "m11": "11. Speed Test / CPU Load Mode", "m12": "12. Repos / [4/5] Cap / Limit", "m13": "13. Customization (Color & BG)", "m14": "14. Lang / Shortcut / Cores / Token / Port", "m0": "0. Exit", "ask": "Select option > ", "all": "ALL", "on": "ON", "off": "OFF", "unit": "nodes/s", "wl_m": {0: "AUTO (CDN)", 1: "Priority RU-SNI", 2: "Strict RU-SNI"}, "srcs": {0: "ALL (GH+TG+Web)", 1: "GH Only", 2: "TG+Web Only", 3: "GH+Web"}, "gh_l": {0: "RU+EN", 1: "RU Only", 2: "EN Only"}, "protos": {0: "ALL", 1: "VLESS", 2: "Trojan", 3: "SS", 4: "HY2/TUIC"}, "bgs": {1: "Pulse", 2: "Matrix", 3: "Stream", 4: "Stars", 5: "Radar", 0: "Off"}, "modes": {1: "2x20", 2: "4x25", 3: "6x25"}, "s1": "[1/5] Collecting sources (GitHub / CDN / TG / Web)...", "s2": "[2/5] Downloading & parsing", "s3": "[3/5] Smart filter & TCP check", "s4": "[4/5] Turbo batch check (Ctrl+C = Stop)", "s5": "[5/5] Measuring download speed", "done": "Done! Working servers:", "url": "Subscriptions:", "back": "Press Enter to return to menu...", "bat_ok": "[+] Shortcut NETPULSE.bat created on Desktop!", "no_xray": "[!] Cores not found! Download automatically from GitHub? (Y/N) > "}
 }
 SUB_MAP, SRC_STATS, CHECKED, FOUND_COUNT, STOP_EVENT, LOCK, PROC_FLAGS = {}, {}, 0, 0, threading.Event(), threading.Lock(), 0
 ACTIVE_PROC, ACTIVE_NAME, ACTIVE_URI, TUN_CFG_PATH, REAL_HOME_IP = None, "", "", "", ""
@@ -604,10 +604,25 @@ def build_sb_sub(uris):
     if not outs: return ""
     cfg = {
         "log": {"level": "info"},
-        "dns": {"servers": [{"tag": "remote", "address": "https://1.1.1", "detour": "proxy"}, {"tag": "local", "address": "local", "detour": "direct"}], "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]},
+        "dns": {
+            "servers": [
+                {"tag": "remote", "type": "https", "server": "1.1.1.1", "detour": "proxy"},
+                {"tag": "local", "type": "local"}
+            ],
+            "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]
+        },
         "inbounds": [{"type": "mixed", "tag": "mixed-in", "listen": "127.0.0.1", "listen_port": 2080}],
-        "outbounds": [{"type": "selector", "tag": "proxy", "outbounds": ["auto"] + tags}, {"type": "urltest", "tag": "auto", "outbounds": tags, "url": "http://gstatic.com", "interval": "5m"}] + outs + [{"type": "direct", "tag": "direct"}, {"type": "dns", "tag": "dns-out"}],
-        "route": {"rules": [{"protocol": "dns", "outbound": "dns-out"}, {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"}, {"ip_is_private": True, "outbound": "direct"}], "auto_detect_interface": True}
+        "outbounds": [{"type": "selector", "tag": "proxy", "outbounds": ["auto"] + tags}, {"type": "urltest", "tag": "auto", "outbounds": tags, "url": "http://gstatic.com", "interval": "5m"}] + outs + [{"type": "direct", "tag": "direct"}],
+        "route": {
+            "rules": [
+                {"action": "sniff"},
+                {"protocol": "dns", "action": "hijack-dns"},
+                {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"},
+                {"ip_is_private": True, "outbound": "direct"}
+            ],
+            "auto_detect_interface": True,
+            "default_domain_resolver": "local"
+        }
     }
     return json.dumps(cfg, ensure_ascii=False, indent=2)
 def wait_port(port, tries=35):
@@ -787,13 +802,14 @@ def pipe_core_logs(proc):
         for raw_ln in iter(proc.stdout.readline, b""):
             if not raw_ln: break
             ln = raw_ln.decode("utf-8", errors="ignore").strip()
+            low = ln.lower()
             if "accepted " in ln:
                 part = ln.split("accepted ", 1).pop()
                 add_log(part[:72])
-            elif "outbound/" in ln and " to " in ln:
-                part = ln.split("outbound/", 1).pop()
-                add_log(part[:72])
-            elif any(x in ln.lower() for x in ("failed", "error", "bind:", "panic")):
+            elif "connection to " in low:
+                idx = low.find("connection to ")
+                add_log(ln[idx:][:72])
+            elif any(x in low for x in ("fatal", "failed", "error", "bind:", "panic")):
                 add_log(f"Core: {ln[-68:]}")
     except Exception:
         pass
@@ -848,14 +864,31 @@ def connect_vpn(uri, label):
             return False
         sb_out = build_sb_out(clean_uri, "proxy")
         if not sb_out:
+            add_log("Ошибка sing-box: невалидный формат ссылки")
             return False
         port = pick_bind_port(CFG.get("px_port", 10809))
-        inb = [{"type": "tun", "interface_name": "NetPulseTUN", "inet4_address": "172.19.0.1/30", "auto_route": True, "strict_route": True, "stack": "system", "sniff": True}] if CFG.get("tun", False) else [{"type": "http", "listen": "127.0.0.1", "listen_port": port}]
+        inb = [{"type": "tun", "interface_name": "NetPulseTUN", "address": ["172.19.0.1/30"], "mtu": 1400, "auto_route": True, "strict_route": True, "stack": "system"}] if CFG.get("tun", False) else [{"type": "http", "listen": "127.0.0.1", "listen_port": port}]
         sb_cfg = {
             "log": {"level": "info", "timestamp": False},
-            "dns": {"servers": [{"tag": "remote", "address": "https://1.1.1", "detour": "proxy"}, {"tag": "local", "address": "local", "detour": "direct"}], "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]},
-            "inbounds": inb, "outbounds": [sb_out, {"type": "direct", "tag": "direct"}, {"type": "dns", "tag": "dns-out"}],
-            "route": {"rules": [{"protocol": "dns", "outbound": "dns-out"}, {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"}, {"ip_is_private": True, "outbound": "direct"}], "auto_detect_interface": True}
+            "dns": {
+                "servers": [
+                    {"tag": "remote", "type": "https", "server": "1.1.1.1", "detour": "proxy"},
+                    {"tag": "local", "type": "local"}
+                ],
+                "rules": [{"domain_suffix": RU_BYPASS_DOMAINS, "server": "local"}]
+            },
+            "inbounds": inb,
+            "outbounds": [sb_out, {"type": "direct", "tag": "direct"}],
+            "route": {
+                "rules": [
+                    {"action": "sniff"},
+                    {"protocol": "dns", "action": "hijack-dns"},
+                    {"domain_suffix": RU_BYPASS_DOMAINS, "outbound": "direct"},
+                    {"ip_is_private": True, "outbound": "direct"}
+                ],
+                "auto_detect_interface": True,
+                "default_domain_resolver": "local"
+            }
         }
         TUN_CFG_PATH = os.path.abspath("netpulse_sb_active.json")
         with open(TUN_CFG_PATH, "w", encoding="utf-8") as f:
@@ -863,7 +896,7 @@ def connect_vpn(uri, label):
         try:
             ACTIVE_PROC = subprocess.Popen([sb_bin, "run", "-c", TUN_CFG_PATH], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
             threading.Thread(target=pipe_core_logs, args=(ACTIVE_PROC,), daemon=True).start()
-            time.sleep(1.2)
+            time.sleep(1.5)
             if ACTIVE_PROC.poll() is None:
                 if not CFG.get("tun", False):
                     set_win_proxy(True, port)
@@ -900,7 +933,6 @@ def connect_vpn(uri, label):
         add_log(f"Сбой запуска Xray: {str(e)[:60]}")
     disconnect_vpn()
     return False
-
 def failover_loop():
     fails = 0
     while True:
