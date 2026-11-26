@@ -1,4 +1,4 @@
-# ⚡ NETPULSE v3.9 (сделано с помощью ии)
+# ⚡ NETPULSE v3.9 (сделано с помощью ии) (мне лень обновлять readme)
 
 **Умный консольный VPN-агрегатор, парсер и клиент для Windows**  
 *Smart Console VPN Aggregator, Scraper & Client for Windows*
